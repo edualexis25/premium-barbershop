@@ -40,4 +40,4 @@ const styles = {
   links: { display:'flex', gap:'1.5rem', alignItems:'center' },
   link: { color:'#fff', textDecoration:'none', fontSize:'0.95rem' },
   logout: { background:'transparent', border:'1px solid #C0C0C0', color:'#C0C0C0', padding:'0.4rem 1rem', borderRadius:'6px', cursor:'pointer' }
-}  
+} 

@@ -63,4 +63,4 @@ const styles = {
   input: { width:'100%', padding:'0.75rem', borderRadius:'8px', border:'1px solid #333', background:'#222', color:'#fff', fontSize:'1rem', boxSizing:'border-box' },
   button: { width:'100%', padding:'0.75rem', borderRadius:'8px', background:'#C0C0C0', color:'#111', fontWeight:'bold', fontSize:'1rem', cursor:'pointer', border:'none' },
   error: { color:'#ff4444', textAlign:'center', margin:0 }
-} 
+}  

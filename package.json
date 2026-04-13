@@ -1,14 +1,15 @@
 {
-  "name": "vite-react-typescript-starter",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
-    "preview": "vite preview"
-  },
+    "name": "premium-barbershop",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+      "dev": "vite",
+      "build": "tsc -b && vite build",
+      "lint": "eslint src",
+      "preview": "vite preview",
+      "check": "npm run build && npm run lint"
+    },
   "dependencies": {
     "@supabase/supabase-js": "^2.101.1",
     "react": "^19.2.4",

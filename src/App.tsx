@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import type { AuthChangeEvent, Session } from '@supabase/supabase-js'
 import { supabase } from './lib/supabase'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
@@ -13,17 +14,32 @@ import Ingresos from './pages/Ingresos'
 import MisCitas from './pages/MisCitas'
 
 function App() {
-  const [session, setSession] = useState<any>(null)
+  const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const loadSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
       setSession(session)
       setLoading(false)
-    })
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
+    }
+
+    loadSession()
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(
+      (_event: AuthChangeEvent, session: Session | null) => {
+        setSession(session)
+      }
+    )
+
+    return () => {
+      subscription.unsubscribe()
+    }
   }, [])
 
   if (loading) return <div>Cargando...</div>
@@ -32,16 +48,32 @@ function App() {
     <BrowserRouter>
       {session && <Navbar />}
       <Routes>
-        {/* Rutas públicas */}
         <Route path="/reserva" element={<Reserva />} />
         <Route path="/reserva/exito" element={<ReservaExito />} />
-        {/* Rutas admin */}
-        <Route path="/login" element={!session ? <Login /> : <Navigate to="/" />} />
-        <Route path="/" element={session ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route path="/servicios" element={session ? <Servicios /> : <Navigate to="/login" />} />
-        <Route path="/horarios" element={session ? <Horarios /> : <Navigate to="/login" />} />
-        <Route path="/citas" element={session ? <Citas /> : <Navigate to="/login" />} />
-        <Route path="/ingresos" element={session ? <Ingresos /> : <Navigate to="/login" />} />
+        <Route
+          path="/login"
+          element={!session ? <Login /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/"
+          element={session ? <Dashboard /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/servicios"
+          element={session ? <Servicios /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/horarios"
+          element={session ? <Horarios /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/citas"
+          element={session ? <Citas /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/ingresos"
+          element={session ? <Ingresos /> : <Navigate to="/login" replace />}
+        />
         <Route path="/mis-citas" element={<MisCitas />} />
       </Routes>
     </BrowserRouter>
